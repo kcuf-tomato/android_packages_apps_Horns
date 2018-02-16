@@ -23,6 +23,10 @@
         settings:defaultColorValue="0xff00afb4"
         android:persistent="false" />
 
+    <Preference
+        android:key="accent_picker"
+        android:title="@string/theme_accent_picker_title" />
+
     <PreferenceCategory
         android:key="aosp_themeing"
         android:title="@string/aosp_themeing_title">
