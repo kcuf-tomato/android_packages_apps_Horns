@@ -15,7 +15,7 @@
  */
 package com.stag.horns.fragments;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.os.UserHandle;
 import androidx.preference.Preference;
