@@ -32,4 +32,14 @@
             android:fragment="com.stag.horns.fragments.SmartPixels" />
 
     </PreferenceCategory>
+
+        <Preference
+            android:key="app_ops_settings"
+            android:title="@string/app_ops_settings_title"
+            android:summary="@string/app_ops_settings_summary" >
+            <intent android:action="android.intent.action.MAIN"
+                android:targetPackage="com.android.settings"
+                android:targetClass="com.android.settings.applications.appops.AppOpsSummary" />
+        </Preference>
+
 </PreferenceScreen>
