@@ -1029,4 +1029,7 @@
     <string name="lockscreen_date_hide_title">Hide Date Widget</string>
     <string name="lockscreen_date_hide_summary">Enable to Hide Date and other items\n Music info on Ambient screen will be hidden as well</string>
 
+    <!-- Clock style -->
+    <string name="clock_style_title">Clock style</string>
+    <string name="clock_style_summary">Choose between Default &amp; Analog Clocks</string>
 </resources>
