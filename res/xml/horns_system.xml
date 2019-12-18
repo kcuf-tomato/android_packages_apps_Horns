@@ -72,6 +72,13 @@
 
     </PreferenceCategory>
 
+
+    <com.google.android.settings.aware.AwareSettingsDialogPreference
+        android:key="aware_settings"
+        android:icon="@drawable/dt_aware"
+        android:title="@string/aware_settings_title"
+        android:summary="@string/aware_settings_summary" />
+
     <!-- Animations -->
     <PreferenceCategory
         android:key="quick_settings_animations"
