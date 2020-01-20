@@ -24,6 +24,12 @@
         android:fragment="com.android.settings.gestures.PreventRingingGestureSettings"
         settings:controller="com.android.settings.gestures.PreventRingingParentPreferenceController" />
 
+    <Preference
+        android:key="pixel_gesture_settings"
+        android:title="@string/pixel_gesture_title"
+        android:summary="@string/pixel_gesture_summary"
+        android:fragment="com.stag.horns.fragments.PixelGestureHolder" />
+
     <com.stag.horns.preferences.SystemSettingSwitchPreference
         android:key="double_tap_sleep_gesture"
         android:title="@string/double_tap_to_sleep_title"

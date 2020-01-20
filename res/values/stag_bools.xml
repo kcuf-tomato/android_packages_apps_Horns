@@ -2,4 +2,7 @@
 <resources>
     <!-- FOD recognizing animation -->
     <bool name="showFODAnimationPicker">false</bool>
+
+    <!-- Whether to display pixel gestures category -->
+    <bool name="is_pixel_device">false</bool>
 </resources>

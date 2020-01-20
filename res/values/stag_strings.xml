@@ -31,6 +31,10 @@
     <string name="notifications_title">Notifications</string>
     <string name="keyboard_ime_title">Keyboard and IME</string>
 
+    <!-- Pixel -->
+    <string name="pixel_gesture_title">Pixel Gestures</string>
+    <string name="pixel_gesture_summary">Features specific to Pixel like Active Edge</string>
+
     <!-- General strings -->
     <string name="ok">OK</string>
     <string name="reset">Reset</string>

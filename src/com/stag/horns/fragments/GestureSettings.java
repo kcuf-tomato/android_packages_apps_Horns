@@ -32,6 +32,7 @@ public class GestureSettings extends SettingsPreferenceFragment implements
         OnPreferenceChangeListener {
 
     private static final String TORCH_POWER_BUTTON_GESTURE = "torch_power_button_gesture";
+    private static final String PIXEL_CATEGORY = "pixel_gesture_settings";
 
     private ListPreference mTorchPowerButton;
 
@@ -52,6 +53,11 @@ public class GestureSettings extends SettingsPreferenceFragment implements
         mTorchPowerButton.setValue(Integer.toString(mTorchPowerButtonValue));
         mTorchPowerButton.setSummary(mTorchPowerButton.getEntry());
         mTorchPowerButton.setOnPreferenceChangeListener(this);
+
+        Preference Pixel = findPreference(PIXEL_CATEGORY);
+        if (!getResources().getBoolean(R.bool.is_pixel_device)) {
+            getPreferenceScreen().removePreference(Pixel);
+        }
     }
 
     @Override
