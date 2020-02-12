@@ -19,7 +19,7 @@
         android:key="lockscreen_clock_category"
         android:title="@string/lockscreen_clockdate_category">
 
-    <com.stag.horns.preferences.SystemSettingListPreference
+        <com.stag.horns.preferences.SystemSettingListPreference
             android:key="lockscreen_clock_selection"
             android:title="@string/lockscreen_clock_title"
             android:dialogTitle="@string/lockscreen_clock_dialog_title"
@@ -27,20 +27,26 @@
             android:entryValues="@array/lockscreen_clock_selection_values"
             android:defaultValue="2" />
 
-    <com.stag.horns.preferences.SystemSettingListPreference 
+        <com.stag.horns.preferences.SystemSettingListPreference 
+            android:key="lock_clock_font_style"
+            android:title="@string/clock_font_style_title"
+            android:entries="@array/font_style_entries"
+            android:entryValues="@array/font_style_values"
+            android:defaultValue="4" />
+
+        <com.stag.horns.preferences.SystemSettingSwitchPreference
+            android:key="lockscreen_date_hide"
+            android:title="@string/lockscreen_date_hide_title"
+            android:summary="@string/lockscreen_date_hide_summary"
+            android:defaultValue="false" />
+
+        <com.stag.horns.preferences.SystemSettingListPreference 
             android:key="lockscreen_date_selection"
             android:title="@string/lockscreen_date_selection_title"
             android:dialogTitle="@string/lockscreen_date_dialog_title"
             android:entries="@array/lockscreen_date_selection_entries"
             android:entryValues="@array/lockscreen_date_selection_values"
             android:defaultValue="0" />
-
-        <com.stag.horns.preferences.SystemSettingListPreference
-            android:key="lock_clock_font_style"
-            android:title="@string/clock_font_style_title"
-            android:entries="@array/font_style_entries"
-            android:entryValues="@array/font_style_values"
-            android:defaultValue="4" />
 
 	<com.stag.horns.preferences.SystemSettingListPreference 
             android:key="lock_date_font_style"
