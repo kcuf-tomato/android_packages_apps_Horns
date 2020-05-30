@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
+
 import androidx.preference.ListPreference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.Preference;
@@ -43,16 +44,22 @@ import com.android.internal.logging.nano.MetricsProto;
 import com.android.internal.util.stag.StagUtils;
 import com.android.settings.R;
 
+import com.android.settings.gestures.SystemNavigationGestureSettings;
+
 import com.stag.horns.preferences.SystemSettingListPreference;
-import com.stag.horns.preferences.SystemSettingSwicthPreference;
+import com.stag.horns.preferences.SystemSettingSwitchPreference;
 
 public class NavbarSettings extends SettingsPreferenceFragment
         implements OnPreferenceChangeListener {
 
     private static final String NAV_BAR_LAYOUT = "nav_bar_layout";
     private static final String SYSUI_NAV_BAR = "sysui_nav_bar";
+
     private static final String KEY_CATEGORY_LEFT_SWIPE    = "left_swipe";
     private static final String KEY_CATEGORY_RIGHT_SWIPE   = "right_swipe";
+    private static final String KEY_CATEGORY_LEFT_VERTICAL_SWIPE    = "left_vertical_swipe";
+    private static final String KEY_CATEGORY_RIGHT_VERTICAL_SWIPE   = "right_vertical_swipe";
+
     private static final String KEY_LONG_BACK_SWIPE_TIMEOUT = "long_back_swipe_timeout";
     private static final String KEY_BACK_SWIPE_EXTENDED = "back_swipe_extended";
     private static final String KEY_LEFT_SWIPE_ACTIONS = "left_swipe_actions";
@@ -90,7 +97,6 @@ public class NavbarSettings extends SettingsPreferenceFragment
         super.onCreate(icicle);
         addPreferencesFromResource(R.xml.horns_navigation);
         mResolver = getActivity().getContentResolver();
-
         mNavBarLayout = (ListPreference) findPreference(NAV_BAR_LAYOUT);
         mNavBarLayout.setOnPreferenceChangeListener(this);
         String navBarLayoutValue = Settings.Secure.getString(mResolver, SYSUI_NAV_BAR);
@@ -104,7 +110,7 @@ public class NavbarSettings extends SettingsPreferenceFragment
         leftVerticalSwipeCategory = (PreferenceCategory) findPreference(KEY_CATEGORY_LEFT_VERTICAL_SWIPE);
         rightVerticalSwipeCategory = (PreferenceCategory) findPreference(KEY_CATEGORY_RIGHT_VERTICAL_SWIPE);
 
-        int leftSwipeActions = Settings.System.getIntForUser(resolver,
+        int leftSwipeActions = Settings.System.getIntForUser(mResolver,
                 Settings.System.LEFT_LONG_BACK_SWIPE_ACTION, 0,
                 UserHandle.USER_CURRENT);
         mLeftSwipeActions = (ListPreference) findPreference(KEY_LEFT_SWIPE_ACTIONS);
@@ -112,7 +118,7 @@ public class NavbarSettings extends SettingsPreferenceFragment
         mLeftSwipeActions.setSummary(mLeftSwipeActions.getEntry());
         mLeftSwipeActions.setOnPreferenceChangeListener(this);
 
-        int rightSwipeActions = Settings.System.getIntForUser(resolver,
+        int rightSwipeActions = Settings.System.getIntForUser(mResolver,
                 Settings.System.RIGHT_LONG_BACK_SWIPE_ACTION, 0,
                 UserHandle.USER_CURRENT);
         mRightSwipeActions = (ListPreference) findPreference(KEY_RIGHT_SWIPE_ACTIONS);
@@ -120,18 +126,17 @@ public class NavbarSettings extends SettingsPreferenceFragment
         mRightSwipeActions.setSummary(mRightSwipeActions.getEntry());
         mRightSwipeActions.setOnPreferenceChangeListener(this);
 
-        mLeftSwipeAppSelection = (Preference) findPreference(KEY_LEFT_SWIPE_ACTION);
-        boolean isAppSelection = Settings.System.getIntForUser(resolver,
+        mLeftSwipeAppSelection = (Preference) findPreference(KEY_LEFT_SWIPE_APP_ACTION);
+        boolean isAppSelection = Settings.System.getIntForUser(mResolver,
                 Settings.System.LEFT_LONG_BACK_SWIPE_ACTION, 0, UserHandle.USER_CURRENT) == 5/*action_app_action*/;
         mLeftSwipeAppSelection.setEnabled(isAppSelection);
 
-        mRightSwipeAppSelection = (Preference) findPreference(KEY_RIGHT_SWIPE_ACTION);
-        isAppSelection = Settings.System.getIntForUser(resolver,
+        mRightSwipeAppSelection = (Preference) findPreference(KEY_RIGHT_SWIPE_APP_ACTION);
+        isAppSelection = Settings.System.getIntForUser(mResolver,
                 Settings.System.RIGHT_LONG_BACK_SWIPE_ACTION, 0, UserHandle.USER_CURRENT) == 5/*action_app_action*/;
         mRightSwipeAppSelection.setEnabled(isAppSelection);
-        customAppCheck();
 
-        int leftVerticalSwipeActions = Settings.System.getIntForUser(resolver,
+        int leftVerticalSwipeActions = Settings.System.getIntForUser(mResolver,
                 Settings.System.LEFT_VERTICAL_BACK_SWIPE_ACTION, 0,
                 UserHandle.USER_CURRENT);
         mLeftVerticalSwipeActions = (ListPreference) findPreference(KEY_LEFT_VERTICAL_SWIPE_ACTIONS);
@@ -139,7 +144,7 @@ public class NavbarSettings extends SettingsPreferenceFragment
         mLeftVerticalSwipeActions.setSummary(mLeftVerticalSwipeActions.getEntry());
         mLeftVerticalSwipeActions.setOnPreferenceChangeListener(this);
 
-        int rightVerticalSwipeActions = Settings.System.getIntForUser(resolver,
+        int rightVerticalSwipeActions = Settings.System.getIntForUser(mResolver,
                 Settings.System.RIGHT_VERTICAL_BACK_SWIPE_ACTION, 0,
                 UserHandle.USER_CURRENT);
         mRightVerticalSwipeActions = (ListPreference) findPreference(KEY_RIGHT_VERTICAL_SWIPE_ACTIONS);
@@ -148,19 +153,19 @@ public class NavbarSettings extends SettingsPreferenceFragment
         mRightVerticalSwipeActions.setOnPreferenceChangeListener(this);
 
         mLeftVerticalSwipeAppSelection = (Preference) findPreference(KEY_LEFT_VERTICAL_SWIPE_APP_ACTION);
-        isAppSelection = Settings.System.getIntForUser(resolver,
+        isAppSelection = Settings.System.getIntForUser(mResolver,
                 Settings.System.LEFT_VERTICAL_BACK_SWIPE_ACTION, 0, UserHandle.USER_CURRENT) == 5/*action_app_action*/;
         mLeftVerticalSwipeAppSelection.setEnabled(isAppSelection);
 
         mRightVerticalSwipeAppSelection = (Preference) findPreference(KEY_RIGHT_VERTICAL_SWIPE_APP_ACTION);
-        isAppSelection = Settings.System.getIntForUser(resolver,
+        isAppSelection = Settings.System.getIntForUser(mResolver,
                 Settings.System.RIGHT_VERTICAL_BACK_SWIPE_ACTION, 0, UserHandle.USER_CURRENT) == 5/*action_app_action*/;
         mRightVerticalSwipeAppSelection.setEnabled(isAppSelection);
 
         mTimeout = (SystemSettingListPreference) findPreference(KEY_LONG_BACK_SWIPE_TIMEOUT);
 
         mExtendedSwipe = (SystemSettingSwitchPreference) findPreference(KEY_BACK_SWIPE_EXTENDED);
-        boolean extendedSwipe = Settings.System.getIntForUser(resolver,
+        boolean extendedSwipe = Settings.System.getIntForUser(mResolver,
                 Settings.System.BACK_SWIPE_EXTENDED, 0,
                 UserHandle.USER_CURRENT) != 0;
         mExtendedSwipe.setChecked(extendedSwipe);
@@ -183,11 +188,11 @@ public class NavbarSettings extends SettingsPreferenceFragment
             Settings.Secure.putString(mResolver, SYSUI_NAV_BAR, (String) newValue);
             return true;
         } else if (preference == mLeftSwipeActions) {
-            int leftSwipeActions = Integer.valueOf((String) objValue);
+            int leftSwipeActions = Integer.valueOf((String) newValue);
             Settings.System.putIntForUser(getContentResolver(),
                     Settings.System.LEFT_LONG_BACK_SWIPE_ACTION, leftSwipeActions,
                     UserHandle.USER_CURRENT);
-            int index = mLeftSwipeActions.findIndexOfValue((String) objValue);
+            int index = mLeftSwipeActions.findIndexOfValue((String) newValue);
             mLeftSwipeActions.setSummary(
                     mLeftSwipeActions.getEntries()[index]);
             mLeftSwipeAppSelection.setEnabled(leftSwipeActions == 5);
@@ -195,11 +200,11 @@ public class NavbarSettings extends SettingsPreferenceFragment
             customAppCheck();
             return true;
         } else if (preference == mRightSwipeActions) {
-            int rightSwipeActions = Integer.valueOf((String) objValue);
+            int rightSwipeActions = Integer.valueOf((String) newValue);
             Settings.System.putIntForUser(getContentResolver(),
                     Settings.System.RIGHT_LONG_BACK_SWIPE_ACTION, rightSwipeActions,
                     UserHandle.USER_CURRENT);
-            int index = mRightSwipeActions.findIndexOfValue((String) objValue);
+            int index = mRightSwipeActions.findIndexOfValue((String) newValue);
             mRightSwipeActions.setSummary(
                     mRightSwipeActions.getEntries()[index]);
             mRightSwipeAppSelection.setEnabled(rightSwipeActions == 5);
@@ -207,16 +212,16 @@ public class NavbarSettings extends SettingsPreferenceFragment
             customAppCheck();
             return true;
         } else if (preference == mExtendedSwipe) {
-            boolean enabled = ((Boolean) objValue).booleanValue();
+            boolean enabled = ((Boolean) newValue).booleanValue();
             mExtendedSwipe.setChecked(enabled);
             mTimeout.setEnabled(!enabled);
             navbarCheck();
         } else if (preference == mLeftVerticalSwipeActions) {
-            int leftVerticalSwipeActions = Integer.valueOf((String) objValue);
+            int leftVerticalSwipeActions = Integer.valueOf((String) newValue);
             Settings.System.putIntForUser(getContentResolver(),
                     Settings.System.LEFT_VERTICAL_BACK_SWIPE_ACTION, leftVerticalSwipeActions,
                     UserHandle.USER_CURRENT);
-            int index = mLeftVerticalSwipeActions.findIndexOfValue((String) objValue);
+            int index = mLeftVerticalSwipeActions.findIndexOfValue((String) newValue);
             mLeftVerticalSwipeActions.setSummary(
                     mLeftVerticalSwipeActions.getEntries()[index]);
             mLeftVerticalSwipeAppSelection.setEnabled(leftVerticalSwipeActions == 5);
@@ -224,11 +229,11 @@ public class NavbarSettings extends SettingsPreferenceFragment
             customAppCheck();
             return true;
         } else if (preference == mRightVerticalSwipeActions) {
-            int rightVerticalSwipeActions = Integer.valueOf((String) objValue);
+            int rightVerticalSwipeActions = Integer.valueOf((String) newValue);
             Settings.System.putIntForUser(getContentResolver(),
                     Settings.System.RIGHT_VERTICAL_BACK_SWIPE_ACTION, rightVerticalSwipeActions,
                     UserHandle.USER_CURRENT);
-            int index = mRightVerticalSwipeActions.findIndexOfValue((String) objValue);
+            int index = mRightVerticalSwipeActions.findIndexOfValue((String) newValue);
             mRightVerticalSwipeActions.setSummary(
                     mRightVerticalSwipeActions.getEntries()[index]);
             mRightVerticalSwipeAppSelection.setEnabled(rightVerticalSwipeActions == 5);
@@ -273,7 +278,12 @@ public class NavbarSettings extends SettingsPreferenceFragment
     }
 
     private void navbarCheck() {
-        mTimeout.setVisible(true);
+
+        boolean extendedSwipe = Settings.System.getIntForUser(getContentResolver(),
+                Settings.System.BACK_SWIPE_EXTENDED, 0,
+                UserHandle.USER_CURRENT) != 0;
+
+	mTimeout.setVisible(true);
         mExtendedSwipe.setVisible(true);
         leftSwipeCategory.setVisible(true);
         rightSwipeCategory.setVisible(true);
@@ -299,14 +309,6 @@ public class NavbarSettings extends SettingsPreferenceFragment
             leftVerticalSwipeCategory.setVisible(false);
             rightVerticalSwipeCategory.setVisible(false);
 	}
-        if (!extendedSwipe) {
-            leftVerticalSwipeCategory.setVisible(false);
-            rightVerticalSwipeCategory.setVisible(false);
-        } else {
-            leftVerticalSwipeCategory.setVisible(true);
-            rightVerticalSwipeCategory.setVisible(true);
-        }
-
     }
 
     private void actionPreferenceReload() {
