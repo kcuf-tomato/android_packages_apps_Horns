@@ -836,64 +836,6 @@
     <string name="fod_recog_animation_summary">Shows an animation while reading your finger</string>
     <string name="fod_recog_animation_effect_title">FOD recognizing animation effect</string>
 
-    <!-- LockScreen UI -->
-    <string name="lockscreen_ui_title">Lockscreen UI</string>
-    <string name="lockscreen_ui_summary">Change the looks of Lockscreen</string>
-
-    <!-- Lock Date Fonts -->
-    <string name="lock_date_font_title">Date font options</string>
-    <string name="lock_date_font_summary">Change the default font of the lockscreen date widget</string>
-    <string name="lock_date_font_dialog_title">Select lock date font</string>
-
-    <!-- Lock Clock & Date Size -->
-    <string name="lockdate_font_size_title">Date font size</string>
-    <string name="lockclock_font_size_title">Clock font size</string>
-
-    <!-- LS OwnerInfo Font & Size -->
-    <string name="lock_ownerinfo_font_title">Owner Info font options</string>
-    <string name="lock_ownerinfo_font_summary">Change the default font of the lockscreen owner info</string>
-    <string name="lock_ownerinfo_font_dialog_title">Select lock owner info font</string>
-    <string name="lockowner_font_size_title">Owner info font size</string>
-
-    <!-- Lockscreen clock style -->
-    <string name="lockscreen_clock_title">Clock style</string>
-    <string name="lockscreen_clock_dialog_title">Select clock style</string>
-    <string name="lockscreen_clock_hide">Hide</string>
-    <string name="lockscreen_clock_default">Default</string>
-    <string name="lockscreen_clock_default_bold">Default (bold)</string>
-    <string name="lockscreen_clock_default_accent">Default (accent)</string>
-    <string name="lockscreen_clock_default_accent_min">Default (accent minutes)</string>
-    <string name="lockscreen_clock_default_accent_hour">Default (accent hours)</string>
-    <string name="lockscreen_clock_sammy">Sammy</string>
-    <string name="lockscreen_clock_sammy_bold">Sammy (bold)</string>
-    <string name="lockscreen_clock_sammy_accent">Sammy (accent)</string>
-    <string name="lockscreen_clock_sammy_accent_hour">Sammy (accent hour)</string>
-    <string name="lockscreen_clock_sammy_accent_min">Sammy (accent minute)</string>
-    <string name="lockscreen_clock_text">Text Clock</string>
-    <!-- Lockscreen Clock, Date & Owner Info -->
-    <string name="lockscreen_clock_options_title">Clock widget options</string>
-    <string name="lockscreen_clock_summary">Modify the style/font/size of the clock widget</string>
-    <string name="lockscreen_date_title">Date options</string>
-    <string name="lockscreen_date_summary">Change the font style/size of the dateview</string>
-    <string name="lockscreen_info_title">Date widget</string>
-    <string name="lockscreen_info_summary">Show the date, weather, alarms and zen on the lockscreen</string>
-    <string name="lockscreen_ownerinfo_title">Owner info options</string>
-    <string name="lockscreen_ownerinfo_summary">Customize the font style/size of the Owner information</string>
-
-    <!-- Lockscreen Date styles -->
-    <string name="lockscreen_date_selection_title">Date style</string>
-    <string name="lockscreen_date_dialog_title">Select date style</string>
-    <string name="lockscreen_date_selection_default">Default</string>
-    <string name="lockscreen_date_selection_str_box">Semi-transparent box</string>
-    <string name="lockscreen_date_selection_str_round">Semi-transparent box (round)</string>
-    <string name="lockscreen_date_selection_qbeta_style">Q Beta pill</string>
-    <string name="lockscreen_date_selection_str_accent">Rounded, simple and with accent</string>
-    <string name="lockscreen_date_selection_str_accent_transparent">Rounded, transparent and with accent</string>
-    <string name="lockscreen_date_selection_str_border_accent">Dark with accented borders</string>
-    <string name="lockscreen_date_selection_str_border_gradient">Dark with gradient borders</string>
-    <string name="lockscreen_date_selection_str_half_gradient">Gradient(Rounded) with transparent ending</string>
-    <string name="lockscreen_date_selection_str_half_accent">Accent(rounded) with transparent ending</string>
-
     <!-- QS blur --> 
     <string name="blur_quicksettings_title">Blur behind quick settings</string>
     <string name="blur_quicksettings_summary">Blurs the darkened background behind quick settings</string>

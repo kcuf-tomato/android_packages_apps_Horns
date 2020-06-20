@@ -700,61 +700,6 @@
     <string-array name="fod_recog_animation_values" translatable="false">
     </string-array>
 
-    <!-- Lockscreen clock style -->
-    <string-array name="lockscreen_clock_titles">
-        <item>@string/lockscreen_clock_default</item>
-        <item>@string/lockscreen_clock_default_bold</item>
-        <item>@string/lockscreen_clock_default_accent</item>
-        <item>@string/lockscreen_clock_default_accent_hour</item>
-        <item>@string/lockscreen_clock_default_accent_min</item>
-        <item>@string/lockscreen_clock_sammy</item>
-        <item>@string/lockscreen_clock_sammy_bold</item>
-        <item>@string/lockscreen_clock_sammy_accent</item>
-        <item>@string/lockscreen_clock_sammy_accent_hour</item>
-        <item>@string/lockscreen_clock_sammy_accent_min</item>
-    </string-array>
-
-    <string-array name="lockscreen_clock_values">
-        <item>0</item> 
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
-
-     <!-- Lockscreen date styles -->
-    <string-array name="lockscreen_date_selection_entries" translatable="false">
-        <item>@string/lockscreen_date_selection_default</item>
-        <item>@string/lockscreen_date_selection_str_box</item>
-        <item>@string/lockscreen_date_selection_str_round</item>
-        <item>@string/lockscreen_date_selection_qbeta_style</item>
-        <item>@string/lockscreen_date_selection_str_accent</item>
-        <item>@string/lockscreen_date_selection_str_accent_transparent</item>
-        <item>@string/lockscreen_date_selection_str_border_accent</item>
-        <item>@string/lockscreen_date_selection_str_border_gradient</item>
-        <item>@string/lockscreen_date_selection_str_half_gradient</item>
-        <item>@string/lockscreen_date_selection_str_half_accent</item>
-    </string-array>
-
-    <string-array name="lockscreen_date_selection_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
-
-    <!-- Active edge actions -->
     <!-- Active edge actions -->
     <string-array name="active_edge_actions_entries" translatable="false">
         <item>@string/action_nothing</item>
