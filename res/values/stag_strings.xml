@@ -953,9 +953,10 @@
     <string name="lockowner_font_size_title">Owner info font size</string>
 
     <!-- Lockscreen clock styles -->
-    <string name="lockscreen_clock_title">Clock style</string>
+    <string name="lockscreen_clock_title">Default Clock Styles</string>
+    <string name="lockscreen_hide_clock_title">Hide Lockscreen Clock</string>
+    <string name="lockscreen_hide_clock_summary">hide/show default clock on lockscreen</string>
     <string name="lockscreen_clock_dialog_title">Select clock style</string>
-    <string name="lockscreen_clock_selection_hidden">Hidden</string>
     <string name="lockscreen_clock_selection_digital">Default</string>
     <string name="lockscreen_clock_selection_digital_bold">Bold (digital)</string>
     <string name="lockscreen_clock_selection_digital_small">Small (digital)</string>
@@ -966,6 +967,7 @@
     <string name="lockscreen_clock_selection_sammy_bold">Sammy (bold)</string>
     <string name="lockscreen_clock_selection_sammy_accent">Sammy accent</string>
     <string name="lockscreen_clock_selection_sammy_accent_hour">Sammy accent hour</string>
+    <string name="lockscreen_clock_selection_sammy_accent_min">Sammy accent minute</string>
     <string name="lockscreen_clock_selection_sammy_accent_alt">Sammy accent(darker hour)</string>
 
     <!-- lockscreen clock and date font style -->
@@ -1031,6 +1033,6 @@
     <string name="lockscreen_date_hide_summary">Enable to Hide Date and other items\n Music info on Ambient screen will be hidden as well</string>
 
     <!-- Clock style -->
-    <string name="clock_style_title">Clock style</string>
+    <string name="clock_style_title">Lockscreen Clock Styles</string>
     <string name="clock_style_summary">Choose between Default &amp; Analog Clocks</string>
 </resources>
