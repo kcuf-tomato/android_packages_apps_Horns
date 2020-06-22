@@ -969,6 +969,8 @@
     <string name="lockscreen_clock_selection_sammy_accent_hour">Sammy accent hour</string>
     <string name="lockscreen_clock_selection_sammy_accent_min">Sammy accent minute</string>
     <string name="lockscreen_clock_selection_sammy_accent_alt">Sammy accent(darker hour)</string>
+    <string name="lockscreen_clock_selection_text">Text (Android 9)</string>
+    <string name="lockscreen_clock_selection_text_alt">Text (Android 10)</string>
 
     <!-- lockscreen clock and date font style -->
     <string name="lockscreen_clockdate_category">Clock &amp; date</string>
@@ -1078,4 +1080,16 @@
     <!-- Clock style -->
     <string name="clock_style_title">Lockscreen Clock Styles</string>
     <string name="clock_style_summary">Choose between Default &amp; Analog Clocks</string>
+
+    <!-- Text Clock -->
+    <string name="text_clock_customizations">Text Clock</string>
+    <string name="text_clock_alignment">Alignment</string>
+    <string name="text_clock_left">Left</string>
+    <string name="text_clock_center">Center</string>
+    <string name="text_clock_right">Right</string>
+    <string name="text_clock_left_right">Left-Right</string>
+    <string name="text_clock_right_left">Right-Left</string>
+    <string name="text_clock_padding">Edge Padding</string>
+
 </resources>
+

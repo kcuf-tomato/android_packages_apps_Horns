@@ -25,14 +25,20 @@ import android.content.ContentResolver;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.preference.SwitchPreference;
+import android.os.UserHandle;
+
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.SwitchPreference;
+
 
 import android.provider.Settings;
 import com.android.settings.R;
@@ -40,25 +46,20 @@ import com.android.settings.SettingsPreferenceFragment;
 
 import com.stag.horns.preferences.CustomSeekBarPreference;
 import com.stag.horns.preferences.SystemSettingSwitchPreference;
+import com.stag.horns.preferences.SystemSettingListPreference;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 
 public class LockScreenUi extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
-    private static final String LOCK_CLOCK_FONTS = "lock_clock_fonts";
-    private static final String LOCK_DATE_FONTS = "lock_date_fonts";
-    private static final String CLOCK_FONT_SIZE  = "lockclock_font_size";
-    private static final String DATE_FONT_SIZE  = "lockdate_font_size";
-    private static final String LOCK_OWNERINFO_FONTS = "lock_ownerinfo_fonts";
-    private static final String LOCKOWNER_FONT_SIZE = "lockowner_font_size";
+    private static final String LOCKSCREEN_CLOCK_SELECTION = "lockscreen_clock_selection";
+    private static final String TEXT_CLOCK_ALIGNMENT = "text_clock_alignment";
+    private static final String TEXT_CLOCK_PADDING = "text_clock_padding";
 
-    private ListPreference mLockClockFonts;
-    private ListPreference mLockDateFonts;
-    private ListPreference mLockOwnerInfoFonts;
-    private CustomSeekBarPreference mClockFontSize;
-    private CustomSeekBarPreference mDateFontSize;
-    private CustomSeekBarPreference mOwnerInfoFontSize;
+    private SystemSettingListPreference mLockClockSelection;
+    private ListPreference mTextClockAlign;
+    private CustomSeekBarPreference mTextClockPadding;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -69,87 +70,87 @@ public class LockScreenUi extends SettingsPreferenceFragment implements
         final PreferenceScreen prefScreen = getPreferenceScreen();
         Resources resources = getResources();
 
-        // Lockscren Clock Fonts
-        mLockClockFonts = (ListPreference) findPreference(LOCK_CLOCK_FONTS);
-        mLockClockFonts.setValue(String.valueOf(Settings.System.getInt(
-                getContentResolver(), Settings.System.LOCK_CLOCK_FONTS, 28)));
-        mLockClockFonts.setSummary(mLockClockFonts.getEntry());
-        mLockClockFonts.setOnPreferenceChangeListener(this);
+        // Lockscreen Clock
+        mLockClockSelection = (SystemSettingListPreference) findPreference(LOCKSCREEN_CLOCK_SELECTION);
+        boolean mClockSelection = Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKSCREEN_CLOCK_SELECTION, 0, UserHandle.USER_CURRENT) == 12
+                || Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKSCREEN_CLOCK_SELECTION, 0, UserHandle.USER_CURRENT) == 13;
+        if (mLockClockSelection == null) {
+            Settings.System.putIntForUser(resolver,
+                Settings.System.LOCKSCREEN_CLOCK_SELECTION, 0, UserHandle.USER_CURRENT);
+        }
+        mLockClockSelection.setOnPreferenceChangeListener(this);
 
-        // Lockscren Date Fonts
-        mLockDateFonts = (ListPreference) findPreference(LOCK_DATE_FONTS);
-        mLockDateFonts.setValue(String.valueOf(Settings.System.getInt(
-                getContentResolver(), Settings.System.LOCK_DATE_FONTS, 28)));
-        mLockDateFonts.setSummary(mLockDateFonts.getEntry());
-        mLockDateFonts.setOnPreferenceChangeListener(this);
+        // Text Clock Alignment
+        mTextClockAlign = (ListPreference) findPreference(TEXT_CLOCK_ALIGNMENT);
+        mTextClockAlign.setEnabled(mClockSelection);
+        mTextClockAlign.setOnPreferenceChangeListener(this);
 
-        // Lockscren OwnerInfo Fonts
-        mLockOwnerInfoFonts = (ListPreference) findPreference(LOCK_OWNERINFO_FONTS);
-        mLockOwnerInfoFonts.setValue(String.valueOf(Settings.System.getInt(
-                getContentResolver(), Settings.System.LOCK_OWNERINFO_FONTS, 28)));
-        mLockOwnerInfoFonts.setSummary(mLockOwnerInfoFonts.getEntry());
-        mLockOwnerInfoFonts.setOnPreferenceChangeListener(this);
+        // Text Clock Padding
+        mTextClockPadding = (CustomSeekBarPreference) findPreference(TEXT_CLOCK_PADDING);
+        boolean mTextClockAlignx = Settings.System.getIntForUser(resolver,
+                    Settings.System.TEXT_CLOCK_ALIGNMENT, 0, UserHandle.USER_CURRENT) == 1;
+        mTextClockPadding.setEnabled(!mTextClockAlignx);
 
-        // Lock Clock Size
-        mClockFontSize = (CustomSeekBarPreference) findPreference(CLOCK_FONT_SIZE);
-        mClockFontSize.setValue(Settings.System.getInt(getContentResolver(),
-                Settings.System.LOCKCLOCK_FONT_SIZE, 54));
-        mClockFontSize.setOnPreferenceChangeListener(this);
+    }
 
-        // Lock Date Size
-        mDateFontSize = (CustomSeekBarPreference) findPreference(DATE_FONT_SIZE);
-        mDateFontSize.setValue(Settings.System.getInt(getContentResolver(),
-                Settings.System.LOCKDATE_FONT_SIZE,18));
-        mDateFontSize.setOnPreferenceChangeListener(this);
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateClock();
+    }
 
-        // Lockscren OwnerInfo Size
-        mOwnerInfoFontSize = (CustomSeekBarPreference) findPreference(LOCKOWNER_FONT_SIZE);
-        mOwnerInfoFontSize.setValue(Settings.System.getInt(getContentResolver(),
-                Settings.System.LOCKOWNER_FONT_SIZE,18));
-        mOwnerInfoFontSize.setOnPreferenceChangeListener(this);
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference) {
+        ContentResolver resolver = getActivity().getContentResolver();
+        if (preference == mLockClockSelection) {
+            updateClock();
+        }
+
+        return super.onPreferenceTreeClick(preference);
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         ContentResolver resolver = getActivity().getContentResolver();
-
-        if (preference == mLockClockFonts) {
-            Settings.System.putInt(getContentResolver(), Settings.System.LOCK_CLOCK_FONTS,
-                    Integer.valueOf((String) newValue));
-            mLockClockFonts.setValue(String.valueOf(newValue));
-            mLockClockFonts.setSummary(mLockClockFonts.getEntry());
+	if (preference == mLockClockSelection) {
+            int value = Integer.parseInt((String) newValue);
+            String[] defaultClock = getResources().getStringArray(R.array.lockscreen_clock_selection_entries);
+            String summary = defaultClock[value];
+            mLockClockSelection.setSummary(summary);
+            boolean val = Integer.valueOf((String) newValue) == 12
+                    || Integer.valueOf((String) newValue) == 13;
+            mTextClockAlign.setEnabled(val);
             return true;
-        } else if (preference == mLockDateFonts) {
-            Settings.System.putInt(getContentResolver(), Settings.System.LOCK_DATE_FONTS,
-                    Integer.valueOf((String) newValue));
-            mLockDateFonts.setValue(String.valueOf(newValue));
-            mLockDateFonts.setSummary(mLockDateFonts.getEntry());
-            return true;
-        } else if (preference == mLockOwnerInfoFonts) {
-            Settings.System.putInt(getContentResolver(), Settings.System.LOCK_OWNERINFO_FONTS,
-                    Integer.valueOf((String) newValue));
-            mLockOwnerInfoFonts.setValue(String.valueOf(newValue));
-            mLockOwnerInfoFonts.setSummary(mLockOwnerInfoFonts.getEntry());
-            return true;
-        } else if (preference == mClockFontSize) {
-            int top = (Integer) newValue;
-            Settings.System.putInt(getContentResolver(),
-                    Settings.System.LOCKCLOCK_FONT_SIZE, top*1);
-            return true;
-        } else if (preference == mDateFontSize) {
-            int top = (Integer) newValue;
-            Settings.System.putInt(getContentResolver(),
-                    Settings.System.LOCKDATE_FONT_SIZE, top*1);
-            return true;
-        } else if (preference == mOwnerInfoFontSize) {
-            int top = (Integer) newValue;
-            Settings.System.putInt(getContentResolver(),
-                    Settings.System.LOCKOWNER_FONT_SIZE, top*1);
+        } else if (preference == mTextClockAlign) {
+            boolean val = Integer.valueOf((String) newValue) == 1;
+            mTextClockPadding.setEnabled(!val);
             return true;
         }
         return false;
     }
 
-    public static void reset(Context mContext) {
+    private void updateClock() {
+        ContentResolver resolver = getActivity().getContentResolver();
+        String currentClock = Settings.Secure.getString(
+            resolver, Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE);
+        final boolean mIsDefaultClock = currentClock != null && currentClock.contains("DefaultClock") ? true : false;
+        String[] defaultClock = getResources().getStringArray(R.array.lockscreen_clock_selection_entries);
+        String[] defaultClockValues = getResources().getStringArray(R.array.lockscreen_clock_selection_values);
+        String[] pluginClock = getResources().getStringArray(R.array.lockscreen_clock_plugin_entries);
+        String[] pluginClockValues = getResources().getStringArray(R.array.lockscreen_clock_plugin_values);
+        if (mIsDefaultClock) {
+            mLockClockSelection.setEntries(defaultClock);
+            mLockClockSelection.setEntryValues(defaultClockValues);
+        } else {
+            mLockClockSelection.setEntries(pluginClock);
+            mLockClockSelection.setEntryValues(pluginClockValues);
+            Settings.System.putIntForUser(resolver,
+                Settings.System.LOCKSCREEN_CLOCK_SELECTION, 0, UserHandle.USER_CURRENT);
+        }
+    }
+
+/*    public static void reset(Context mContext) {
         ContentResolver resolver = mContext.getContentResolver();
         Settings.System.putIntForUser(resolver,
                 Settings.System.LOCKSCREEN_HIDE_CLOCK, 0, UserHandle.USER_CURRENT);
@@ -170,7 +171,7 @@ public class LockScreenUi extends SettingsPreferenceFragment implements
         Settings.System.putIntForUser(resolver,
                 Settings.System.LOCKOWNER_FONT_SIZE, 18, UserHandle.USER_CURRENT);
     }
-
+*/
     @Override
     public int getMetricsCategory() {
         return MetricsProto.MetricsEvent.HORNS;
