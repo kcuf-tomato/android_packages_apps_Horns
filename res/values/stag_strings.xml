@@ -943,6 +943,7 @@
     <!-- Lock Clock & Date Size -->
     <string name="lock_date_font_size_title">Date font size</string>
     <string name="lock_clock_font_size_title">Clock font size</string>
+    <string name="clock_font_size_warning_summary">When using Typeclock clock style use sizes ranging from 20 to 60, beyond 60 is too large for typeclock</string>
 
     <!-- LS OwnerInfo Font & Size -->
     <string name="owner_info_category">Owner Info Options</string>
