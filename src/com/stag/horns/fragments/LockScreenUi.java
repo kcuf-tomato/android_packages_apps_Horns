@@ -159,6 +159,14 @@ public class LockScreenUi extends SettingsPreferenceFragment implements
                 Settings.System.LOCK_DATE_FONT_STYLE, 14, UserHandle.USER_CURRENT);
         Settings.System.putIntForUser(resolver,
                 Settings.System.LOCKSCREEN_DATE_SELECTION, 0, UserHandle.USER_CURRENT);
+        Settings.System.putIntForUser(resolver,
+                Settings.System.LOCK_DATE_FONT_SIZE, 18, UserHandle.USER_CURRENT);
+        Settings.System.putIntForUser(resolver,
+                Settings.System.LOCK_CLOCK_FONT_SIZE , 58, UserHandle.USER_CURRENT);
+        Settings.System.putIntForUser(resolver,
+                Settings.System.LOCK_OWNERINFO_FONTS, 4, UserHandle.USER_CURRENT);
+        Settings.System.putIntForUser(resolver,
+                Settings.System.LOCKOWNER_FONT_SIZE, 18, UserHandle.USER_CURRENT);
     }
 
     @Override
