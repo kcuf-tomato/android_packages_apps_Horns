@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.om.IOverlayManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.ServiceManager;
 import android.provider.Settings;
@@ -39,6 +40,9 @@ import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.R;
 import com.android.settings.core.instrumentation.InstrumentedDialogFragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AccentPicker extends InstrumentedDialogFragment implements OnClickListener {
 
     private static final String TAG_ACCENT_PICKER = "accent_color";
@@ -47,6 +51,65 @@ public class AccentPicker extends InstrumentedDialogFragment implements OnClickL
 
     private IOverlayManager mOverlayManager;
     private int mCurrentUserId;
+
+    Map<String, String> ACCENT_PRESETS = new HashMap<String, String>() {{
+		 put("14", "FFFFC107");
+		 put("20", "FF000000");
+		 put("6", "FF448AFF");
+		 put("19", "FF607D8B");
+		 put("17", "FF795548");
+		 put("37", "ffe52c5f");
+		 put("33", "fff21a48");
+		 put("34", "FFFF1744");
+		 put("47", "ff2e86cd");
+		 put("30", "ffefe3a8");
+		 put("8", "FF00BCD4");
+		 put("55", "ff97f456");
+		 put("16", "FFFF5722");
+		 put("4", "FF7C4DFF");
+		 put("43", "ff7278e5");
+		 put("39", "ffb7095a");
+		 put("54", "FF21ef8b");
+		 put("44", "ff3c5ae0");
+		 put("46", "ff2856ff");
+		 put("10", "FF4CAF50");
+		 put("18", "FF9E9E9E");
+		 put("36", "ffc83c64");
+		 put("48", "ff327ccb");
+		 put("50", "ff0ac8ff");
+		 put("40", "ffa02963");
+		 put("5", "FF536DFE");
+		 put("56", "FF9ABC98");
+		 put("7", "FF03A9F4");
+		 put("11", "FF8BC34A");
+		 put("12", "FFCDDC39");
+		 put("29", "fff6ca11");
+		 put("53", "ff46ff99");
+		 put("31", "fff25555");
+		 put("42", "ff8522ff");
+		 put("45", "ff0042ba");
+		 put("15", "FFFF9800");
+		 put("49", "FFA1B6ED");
+		 put("35", "FFF05361");
+		 put("2", "FFFF4081");
+		 put("3", "FFE040FB");
+		 put("1", "FFFF5252");
+		 put("52", "ff01c18c");
+		 put("41", "ff822b6b");
+		 put("51", "ff009688");
+		 put("9", "FF009688");
+		 put("38", "ffae2463");
+		 put("26", "FF0EE898");
+		 put("25", "FF42f4aa");
+		 put("22", "FF900000");
+		 put("28", "FFFFCC00");
+		 put("27", "FFFFC27B");
+		 put("24", "FF1976D2");
+		 put("23", "FF42069a");
+		 put("32", "ffff6f20");
+		 put("white", "FFFFFFFF");
+		 put("13", "FFFFEB3B");
+    }};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,14 +202,14 @@ public class AccentPicker extends InstrumentedDialogFragment implements OnClickL
         int currentNightMode = getActivity().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         switch (currentNightMode) {
             case Configuration.UI_MODE_NIGHT_NO:
-        	blackAccent.setBackgroundColor(getResources().getColor(R.color.accent_picker_dark_accent));
-        	blackAccent.setBackgroundTintList(getResources().getColorStateList(R.color.accent_picker_dark_accent));
-		break;
+                blackAccent.setBackgroundColor(getResources().getColor(R.color.accent_picker_dark_accent));
+                blackAccent.setBackgroundTintList(getResources().getColorStateList(R.color.accent_picker_dark_accent));
+                break;
             case Configuration.UI_MODE_NIGHT_YES:
                 blackAccent.setBackgroundColor(getResources().getColor(R.color.accent_picker_white_accent));
                 blackAccent.setBackgroundTintList(getResources().getColorStateList(R.color.accent_picker_white_accent));
                 break;
-	}
+        }
 
         setAccent("20", blackAccent);
 
@@ -283,14 +346,40 @@ public class AccentPicker extends InstrumentedDialogFragment implements OnClickL
         return MetricsProto.MetricsEvent.HORNS;
     }
 
+
+    public static int convertToColorInt(String argb) throws NumberFormatException {
+
+        if (argb.startsWith("#")) {
+            argb = argb.replace("#", "");
+        }
+
+        int alpha = -1, red = -1, green = -1, blue = -1;
+
+        if (argb.length() == 8) {
+            alpha = Integer.parseInt(argb.substring(0, 2), 16);
+            red = Integer.parseInt(argb.substring(2, 4), 16);
+            green = Integer.parseInt(argb.substring(4, 6), 16);
+            blue = Integer.parseInt(argb.substring(6, 8), 16);
+        }
+        else if (argb.length() == 6) {
+            alpha = 255;
+            red = Integer.parseInt(argb.substring(0, 2), 16);
+            green = Integer.parseInt(argb.substring(2, 4), 16);
+            blue = Integer.parseInt(argb.substring(4, 6), 16);
+        }
+
+        return Color.argb(alpha, red, green, blue);
+    }
+
     private void setAccent(final String accent, final Button buttonAccent) {
         final ContentResolver resolver = getActivity().getContentResolver();
         if (buttonAccent != null) {
             buttonAccent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+		    int intHex = convertToColorInt(ACCENT_PRESETS.get(accent));
                     Settings.System.putIntForUser(resolver,
-                            Settings.System.ACCENT_COLOR, Integer.parseInt(accent), mCurrentUserId);
+                            Settings.System.ACCENT_COLOR, intHex, mCurrentUserId);
                     dismiss();
                 }
             });
