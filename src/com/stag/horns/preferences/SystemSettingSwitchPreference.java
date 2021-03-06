@@ -17,7 +17,9 @@
 package com.stag.horns.preferences;
 
 import android.content.Context;
+import android.content.Intent;
 import android.provider.Settings;
+import androidx.core.content.ContextCompat.startActivity;
 import androidx.preference.AndroidResources;
 import androidx.preference.SwitchPreference;
 import androidx.preference.PreferenceViewHolder;
@@ -26,7 +28,7 @@ import android.widget.Switch;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.util.AttributeSet;
-
+import android.net.Uri;
 
 import android.util.Log;
 
@@ -83,6 +85,8 @@ public class SystemSettingSwitchPreference extends SwitchPreference {
         super.onBindViewHolder(holder);
         View switchView = holder.findViewById(android.R.id.switch_widget);
         syncSwitchView(switchView);
+	View itemView = holder.itemView;
+        itemView.setOnLongClickListener(mListener);
     }
 
     private void syncSwitchView(View view) {
@@ -97,7 +101,10 @@ public class SystemSettingSwitchPreference extends SwitchPreference {
 
         @Override
 	public boolean onLongClick(View v) {
-	    Log.w(TAG, "Preference with key " + SystemSettingSwitchPreference.this.getKey() + " LongClicked");
+	    String id = SystemSettingSwitchPreference.this.getKey();
+	    String url = "https://raw.githubusercontent.com/vjspranav/StagOS_Features/main/gif/" + id + "/.gif";
+	    Log.w(TAG, "Preference with key " + id + " LongClicked");
+	    startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url)));
 	    return true;
 	}
     }
